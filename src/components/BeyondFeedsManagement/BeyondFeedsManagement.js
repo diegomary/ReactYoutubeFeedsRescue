@@ -39,7 +39,8 @@ render() {
   });
 
   return (
-    <div className="App">    
+    <div className="App">
+    <p>PLUto</p>   
       {feeds}
     </div>
   );
