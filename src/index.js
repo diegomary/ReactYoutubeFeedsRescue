@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+//mport createHistory   from 'history/createBrowserHistory';
+
+import Routes from './routes';
 import './index.css';
-import BeyondFeedsManagement from './components/BeyondFeedsManagement/BeyondFeedsManagement';
+
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<BeyondFeedsManagement />, document.getElementById('root'));
+ReactDOM.render(<Routes/>,document.getElementById('root'));
+
 registerServiceWorker();

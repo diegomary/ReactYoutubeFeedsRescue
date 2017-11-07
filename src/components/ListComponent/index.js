@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './BeyondFeedsManagement.css';
+import './styles.css';
 
 class BeyondFeedsManagement extends Component {
 
@@ -38,10 +38,10 @@ render() {
         </p>);
   });
 
+
   return (
-    <div className="App">
-    <p>PLUto</p>   
-      {feeds}
+    <div className="App">   
+      {feeds}    
     </div>
   );
 
