@@ -34,18 +34,20 @@ getInitialState() {}
 
 render() {
 
+  console.log(this.props);
+
   let feeds = this.state.data.map(function(item) {
       if (item.snippet.title === 'Deleted video')
       return (
-            <h2>THE VIDEO DOESN'T EXIST ANYMORE</h2>
+            <h2 key = {item.id}>THE VIDEO DOESN'T EXIST ANYMORE</h2>
         );
       return (
         <section className="feed-container" key = {item.id}>
-          <Link to={`/details:${item.id}`}>
+          <Link to={`/details/${item.id}/optionalParameter`}>
            <img alt="not found" src = {item.snippet.thumbnails.medium.url} className="feed-img"/>
          </Link>
           <div className="feed-text">
-            <Link to={`/details:${item.id}`}>
+             <Link to={`/details/${item.id}/optionalParameter`}>
               <h2 className="feed-title">{item.snippet.title}</h2>
             </Link>
             <p className="feed-date">Published on {item.snippet.publishedAt}</p>
