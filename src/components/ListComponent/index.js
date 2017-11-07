@@ -33,12 +33,12 @@ getInitialState() {}
 render() {
 
   let feeds = this.state.data.map(function(item) {
-      if (item.snippet.title === 'Deleted video') return;
+      if (item.snippet.title === 'Deleted video') return -1;
 
      return (
       <section className="feed-container" key = {item.kind}>
         <a href ="#">
-          <img src = {item.snippet.thumbnails.medium.url} className="feed-img"/>
+          <img alt="not found" src = {item.snippet.thumbnails.medium.url} className="feed-img"/>
         </a>
         <div className="feed-text">
           <a href="#">
