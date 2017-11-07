@@ -33,9 +33,21 @@ getInitialState() {}
 render() {
 
   let feeds = this.state.data.map(function(item) {
-      return (<p key = {item.kind}><span>{item.snippet.title}</span>&nbsp;
-        <textarea defaultValue={item.snippet.description} rows="10" cols="20"></textarea>     
-        </p>);
+      if (item.snippet.title === 'Deleted video') return;
+
+     return (
+      <section className="feed-container" key = {item.kind}>
+        <a href ="#">
+          <img src = {item.snippet.thumbnails.medium.url} className="feed-img"/>
+        </a>
+        <div className="feed-text">
+          <a href="#">
+            <h2 className="feed-title">{item.snippet.title}</h2>
+          </a>
+          <p className="feed-date">Published on {item.snippet.publishedAt}</p>
+          <p className="feed-description"> {item.snippet.description}</p>          
+        </div>
+      </section>); 
   });
 
 
