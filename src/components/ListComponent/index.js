@@ -12,42 +12,46 @@ constructor(props) {
 
 componentDidMount() {
 
-fetch("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails,status&maxResults=10&playlistId=PLSi28iDfECJPJYFA4wjlF5KUucFvc0qbQ&key=AIzaSyCuv_16onZRx3qHDStC-FUp__A6si-fStw")
-      .then(response => response.json())
-      .then(json => {        
-        this.setState({
-          data: json.items
+fetch("https://apimicrobach.azurewebsites.net/youtube",
+      { method: 'GET',headers: {'Accept': 'application/json','Content-Type': 'application/json',}})
+      .then(response =>{
+      if (response.status >= 400) { return 'error'; }
+      return response.json() })
+      .then(json => {           
+        this.setState({          
+          data: ( json === 'error' ? 'error' : json.items )
         });        
       });
 }
 
 componentWillMount() {}
 componentWillUnmount() {}
-
-shouldComponentUpdate(nextProps,nextState) {
-  return true; 
-}
-
-
+shouldComponentUpdate(nextProps,nextState) {  return true; }
 componentWillReceiveProps(nextProps) {}
 getInitialState() {}
 
-render() {
+render() { 
 
-  console.log(this.props);
+  if (this.state.data === 'error')
+    return (
+    <div className="App">   
+      <h2>An error prevented to read the feeds properly</h2>  
+    </div>
+  );
+
 
   let feeds = this.state.data.map(function(item) {
       if (item.snippet.title === 'Deleted video')
       return (
             <h2 key = {item.id}>THE VIDEO DOESN'T EXIST ANYMORE</h2>
         );
-      return (
+      return (       
         <section className="feed-container" key = {item.id}>
-          <Link to={`/details/${item.id}/optionalParameter`}>
+          <Link to = {`/details/${item.id}/optionalParameter`}>
            <img alt="not found" src = {item.snippet.thumbnails.medium.url} className="feed-img"/>
          </Link>
           <div className="feed-text">
-             <Link to={`/details/${item.id}/optionalParameter`}>
+             <Link to = {`/details/${item.id}/optionalParameter`}>
               <h2 className="feed-title">{item.snippet.title}</h2>
             </Link>
             <p className="feed-date">Published on {item.snippet.publishedAt}</p>
