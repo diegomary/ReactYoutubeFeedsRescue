@@ -7,16 +7,22 @@ import NotFoundComponent from './components/NotFoundComponent/index';
 
 class Routes extends Component {
 	constructor(props) {
+
     	super(props);
-    	this.state = { routeState: undefined, };   
+    	this.state = { routeState: undefined}; 
+    	
 	}
+
+
+	myCallback = (item) => {console.log(item)}
+
 	render() {
 		return(
 			<Router>					 
 				<Switch>
-				    <Route exact path = "/" component = { ListComponent } />
+				    <Route exact path = "/" render={(props) => <ListComponent {...props} callbackFromParent={this.myCallback}/>}/>
 				    {/*<Route exact path="/details/:id/:optionalparam?" component = { DetailsComponent } newparam='Test parameter'/>*/}				
-				    <Route exact path="/details/:id/:optionalparam?" render={(props) => <DetailsComponent {...props} newparam='Test parameter'/>}/>
+				    <Route exact path="/details/:id/:optionalparam?" render={(props) => <DetailsComponent {...props}/>}/>
 				    <Route component  = { NotFoundComponent } />
 				</Switch>   				
   			</Router>
