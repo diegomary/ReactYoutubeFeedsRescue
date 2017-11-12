@@ -56,11 +56,11 @@ render() {
         );
       return (       
         <section className="feed-container" key = {item.id}>
-          <Link to = {`/details/${item.id}/pippala`}>
+          <Link to = {`/details/${item.id}/secondoptional`}>
            <img alt="not found" src = {item.snippet.thumbnails.medium.url} className="feed-img"/>
          </Link>
           <div className="feed-text">
-             <Link to = {`/details/${item.id}/maria`}>
+             <Link to = {`/details/${item.id}/secondoptional`}>
               <h2 className="feed-title">{item.snippet.title}</h2>
             </Link>
             <p className="feed-date">Published on {item.snippet.publishedAt}</p>
