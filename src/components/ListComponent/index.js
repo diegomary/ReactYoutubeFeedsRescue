@@ -52,6 +52,8 @@ render() {
   let feeds = this.state.data.map((item)=> {
       // Communication with the parent
       this.props.callbackFromParent(item); 
+      localStorage.setItem(item.id, JSON.stringify(item));
+
 
       if (item.snippet.title === 'Deleted video')
       return (

@@ -22,7 +22,7 @@ class Routes extends Component {
 				<Switch>
 				    <Route exact path = "/" render={(props) => <ListComponent {...props} callbackFromParent={this.myCallback}/>}/>
 				    {/*<Route exact path="/details/:id/:optionalparam?" component = { DetailsComponent } newparam='Test parameter'/>*/}				
-				    <Route exact path="/details/:id/:optionalparam?" render={(props) => <DetailsComponent {...props}/>}/>
+				    <Route exact path="/details/:id/:optionalparam?" render={(props) => <DetailsComponent {...props} otherparam="testparameter"/>}/>
 				    <Route component  = { NotFoundComponent } />
 				</Switch>   				
   			</Router>
