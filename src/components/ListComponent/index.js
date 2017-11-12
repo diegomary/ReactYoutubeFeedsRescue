@@ -7,13 +7,18 @@ class ListComponent extends Component {
 
 constructor(props) {
     super(props);
-    this.state = { data: [], };
+    this.state = { data: undefined, };
 }
 
-componentDidMount() {
 
-fetch("https://apimicrobach.azurewebsites.net/youtube",
-      { method: 'GET',headers: {'Accept': 'application/json','Content-Type': 'application/json',}})
+componentDidMount() {
+fetch("https://apimicrobach.azurewebsites.net/youtube",{ 
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization':'Basic ' + btoa('diego:secret')}
+      })
       .then(response =>{
       if (response.status >= 400) { return 'error'; }
       return response.json() })
@@ -24,11 +29,15 @@ fetch("https://apimicrobach.azurewebsites.net/youtube",
       });
 }
 
-componentWillMount() {}
+componentWillMount() {
+  this.setState({ data: [], });
+}
+
+
+
 componentWillUnmount() {}
 shouldComponentUpdate(nextProps,nextState) {  return true; }
 componentWillReceiveProps(nextProps) {}
-getInitialState() {}
 
 render() { 
 
@@ -47,11 +56,11 @@ render() {
         );
       return (       
         <section className="feed-container" key = {item.id}>
-          <Link to = {`/details/${item.id}/optionalParameter`}>
+          <Link to = {`/details/${item.id}/pippala`}>
            <img alt="not found" src = {item.snippet.thumbnails.medium.url} className="feed-img"/>
          </Link>
           <div className="feed-text">
-             <Link to = {`/details/${item.id}/optionalParameter`}>
+             <Link to = {`/details/${item.id}/maria`}>
               <h2 className="feed-title">{item.snippet.title}</h2>
             </Link>
             <p className="feed-date">Published on {item.snippet.publishedAt}</p>
