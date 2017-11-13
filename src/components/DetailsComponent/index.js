@@ -1,5 +1,5 @@
 import React, {Component } from 'react';
-import './styles.css';
+import styles from './styles.css';
 
 class DetailsComponent extends Component {
 constructor(props) {
@@ -28,16 +28,18 @@ componentWillUnmount()
     }
 
     return (
-      <div>
-        <h1>
-          Details Component id: {decodeURIComponent(this.props.match.params.id)}         
-        </h1>
-        <h1>        
-          Details Component optionalParameter: {this.props.match.params.optionalparam}
-        </h1>
-        <p>{this.item.snippet.description}</p>
-
-      </div>
+      <div className = {styles.feedcontainer}>
+     <h1 className={styles.feedtitle}>{this.item.snippet.title}</h1>
+     <div className={styles.videocontainer}>
+       <div className={styles.videowrapper}>
+         <iframe src={"https://www.youtube.com/embed/" + this.item.contentDetails.upload.videoId}></iframe>
+       </div>
+     </div>
+     <div className={styles.feedtext}>
+     <p className={styles.feeddate}>{this.item.snippet.publishedAt}</p>
+     <p className={styles.feeddescription}>{this.item.snippet.description}</p>
+     </div>
+     </div>
     );
   }
 }
