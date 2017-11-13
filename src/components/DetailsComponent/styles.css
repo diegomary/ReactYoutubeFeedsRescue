@@ -1,3 +1,56 @@
-.App {
-  
-}
+body {
+  height: 100%;
+  color: #393939;
+  font-family: 'verdana'; }
+
+.feedcontainer {
+  padding: 0 4em;
+  box-sizing: border-box;
+  margin-top: 1em;
+  margin-left: 2em;
+  margin-right: 2em;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  height: 100%;
+  background-color: white; }
+
+.feedtitle {
+  padding: 1em 0;
+  margin: 0; }
+
+.videocontainer {
+  clear: both;
+  width: 45em; }
+
+.videowrapper {
+  position: relative;
+  height: 0;
+  padding-bottom: 55%;
+  overflow: hidden;
+  display: block; }
+
+.videowrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block; }
+
+.feedtext {
+  width: 45em;
+  padding: 1em 0; }
+
+.feeddate {
+  font-weight: bold;
+  padding: 1em 0; }
+
+@media (max-width: 58em) {
+  .feedcontainer {
+    padding: 0 1em; }
+  .feedtitle {
+    font-size: 1.5em; }
+  .videocontainer {
+    clear: both;
+    width: 100%; }
+  .feedtext {
+    width: 100%; } }

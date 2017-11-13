@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './styles.css';
 
+
 class ListComponent extends Component {
 
 constructor(props) {
@@ -37,12 +38,12 @@ render() {
       return (       
         <section className={styles.feedcontainer} key = {item.id}>
 
-        <Link to = {this.detailsData}>
+        <Link  to = {this.detailsData}>
          {/* <Link to = {`/details/${encodeURIComponent(item.id.replace(/'?'/g, '%3F'))}/secondoptional`}>*/}
            <img alt="not found" src = {item.snippet.thumbnails.medium.url} className={styles.feedimg}/>
          </Link>
           <div className={styles.feedtext}>
-           <Link to = {this.detailsData}>
+           <Link style={{textDecoration:'none', color:'#393939'}} to = {this.detailsData}>
             {/* <Link to = {`/details/${encodeURIComponent(item.id.replace(/'?'/g, '%3F'))}/secondoptional`}>*/}
               <h2 className={styles.feedtitle}>{item.snippet.title}</h2>
             </Link>

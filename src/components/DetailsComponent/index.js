@@ -32,11 +32,11 @@ componentWillUnmount()
      <h1 className={styles.feedtitle}>{this.item.snippet.title}</h1>
      <div className={styles.videocontainer}>
        <div className={styles.videowrapper}>
-         <iframe src={"https://www.youtube.com/embed/" + this.item.contentDetails.upload.videoId}></iframe>
+         <iframe title = "feedvideo" width="420" height="315" src={"https://www.youtube.com/embed/" + this.item.contentDetails.upload.videoId}></iframe>
        </div>
      </div>
      <div className={styles.feedtext}>
-     <p className={styles.feeddate}>{this.item.snippet.publishedAt}</p>
+     <p className={styles.feeddate}>Published on {this.item.snippet.publishedAt}</p>
      <p className={styles.feeddescription}>{this.item.snippet.description}</p>
      </div>
      </div>
