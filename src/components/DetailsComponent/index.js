@@ -4,16 +4,29 @@ import './styles.css';
 class DetailsComponent extends Component {
 constructor(props) {
     super(props);
-    this.store= JSON.parse(localStorage.getItem(decodeURIComponent(this.props.match.params.id)));
-    //localStorage.clear();  
+    this.state = { data: undefined, };
+    this.item = {};   
+}
+componentWillMount() {
+
+  this.setState({ data: this.props.location.itemData,});
+  if(typeof this.props.location.itemData !== 'undefined')
+  {localStorage.setItem(this.props.match.params.id, JSON.stringify(this.props.location.itemData));}
 }
 
-
-
+componentWillUnmount()
+{  
+  localStorage.clear();
+}
 
   render() {
 
-  
+    this.item = this.state.data;
+    if(typeof this.item === 'undefined') 
+    {     
+      this.item = JSON.parse(localStorage.getItem(this.props.match.params.id));
+    }
+
     return (
       <div>
         <h1>
@@ -22,7 +35,7 @@ constructor(props) {
         <h1>        
           Details Component optionalParameter: {this.props.match.params.optionalparam}
         </h1>
-        <p>{this.store.snippet.description}</p>
+        <p>{this.item.snippet.description}</p>
 
       </div>
     );

@@ -7,6 +7,7 @@ class ListComponent extends Component {
 constructor(props) {
     super(props);
     this.state = { data: undefined, };
+    this.detailsData = {};
 }
 
 
@@ -28,21 +29,21 @@ render() {
 
   let feeds = this.state.data.map((item)=> {
      
-      const obj = {pathname: `/details/${encodeURIComponent(item.id.replace(/'?'/g, '%3F'))}`,it:item };
-      localStorage.setItem(item.id, JSON.stringify(item));
-
-
+      this.detailsData = {pathname: `/details/${encodeURIComponent(item.id.replace(/'?'/g, '%3F'))}`,itemData:item };
       if (item.snippet.title === 'Deleted video')
       return (
             <h2 key = {item.id}>THE VIDEO DOESN'T EXIST ANYMORE</h2>
         );
       return (       
         <section className="feed-container" key = {item.id}>
-          <Link to = {`/details/${encodeURIComponent(item.id.replace(/'?'/g, '%3F'))}/secondoptional`}>
+
+        <Link to = {this.detailsData}>
+         {/* <Link to = {`/details/${encodeURIComponent(item.id.replace(/'?'/g, '%3F'))}/secondoptional`}>*/}
            <img alt="not found" src = {item.snippet.thumbnails.medium.url} className="feed-img"/>
          </Link>
           <div className="feed-text">
-             <Link to = {`/details/${encodeURIComponent(item.id.replace(/'?'/g, '%3F'))}/secondoptional`}>
+           <Link to = {this.detailsData}>
+            {/* <Link to = {`/details/${encodeURIComponent(item.id.replace(/'?'/g, '%3F'))}/secondoptional`}>*/}
               <h2 className="feed-title">{item.snippet.title}</h2>
             </Link>
             <p className="feed-date">Published on {item.snippet.publishedAt}</p>
@@ -52,17 +53,12 @@ render() {
         ); 
   });
 
-
-
-
   return (    
     <div className="App">   
       {feeds}    
     </div>
   );
-
 }
 }
-
 
 export default ListComponent;
