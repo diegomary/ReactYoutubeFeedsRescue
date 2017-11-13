@@ -11,22 +11,8 @@ constructor(props) {
 
 
 componentDidMount() {
-fetch("https://apimicrobach.azurewebsites.net/youtube",{ 
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization':'Basic ' + btoa('diego:secret')}
-      })
-      .then(response =>{
-      if (response.status >= 400) { return 'error'; }
-      return response.json() })
-      .then(json => {           
-        this.setState({          
-          data: ( json === 'error' ? 'error' : json.items )
-        });        
-      });
-}
+   this.setState({data: this.props.youtubeFeeds()});
+ }
 
 componentWillMount() {
   this.setState({ data: [], });
@@ -37,21 +23,12 @@ componentWillUnmount() {}
 shouldComponentUpdate(nextProps,nextState) {  return true; }
 componentWillReceiveProps(nextProps) {}
 
-render() {
-
-
-
-  if (this.state.data === 'error')
-    return (
-    <div className="App">   
-      <h2>An error prevented to read the feeds properly</h2>  
-    </div>
-  );
+render() { 
 
 
   let feeds = this.state.data.map((item)=> {
-      // Communication with the parent
-      this.props.callbackFromParent(item); 
+     
+      const obj = {pathname: `/details/${encodeURIComponent(item.id.replace(/'?'/g, '%3F'))}`,it:item };
       localStorage.setItem(item.id, JSON.stringify(item));
 
 

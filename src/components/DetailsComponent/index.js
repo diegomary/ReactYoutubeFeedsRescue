@@ -5,7 +5,7 @@ class DetailsComponent extends Component {
 constructor(props) {
     super(props);
     this.store= JSON.parse(localStorage.getItem(decodeURIComponent(this.props.match.params.id)));
-    localStorage.clear();  
+    //localStorage.clear();  
 }
 
 
