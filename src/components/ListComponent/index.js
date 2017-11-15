@@ -11,7 +11,7 @@ class ListComponent extends Component {
     this.state = { data: undefined};
     this.detailsData = {};
     this.pageNumber = 1;
-    this.pageSize = 2;
+    this.pageSize = 5;
     this.feedsLength= this.props.youtubeFeeds().length;
     this.numberOfPages = ( this.feedsLength % this.pageSize ) === 0 ? (this.feedsLength /  this.pageSize) : Math.ceil(this.feedsLength /  this.pageSize);  
     this.isSelected = {element: null, isSelected : false};
@@ -94,17 +94,21 @@ class ListComponent extends Component {
     return (    
       <div className={styles.App}>   
         {feeds}
-        <button onClick= {this.prevPage}>Previous page</button>  
-        <select onChange={this.pageChange} ref = 'test'>
-          <option value="2">2</option>
-          <option value="3">3</option>
+
+        <div className={styles.pagination}>
+        <button className = {styles.pageButton} ><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>
+        <button className = {styles.pageButton} onClick= {this.prevPage}><i class="fa fa-angle-left" aria-hidden="true"></i></button>  
+        {pages} 
+        <button className = {styles.pageButton} onClick= {this.nextPage}><i class="fa fa-angle-right" aria-hidden="true"></i></button>
+        <button className = {styles.pageButton}><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
+        <span>Results per page: </span>
+        <select className = {styles.selectStyle} onChange={this.pageChange} ref = 'test'>
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="25">25</option>
           <option value="50">50</option>
-        </select>    
-        <button onClick= {this.nextPage}>Next page</button>
-        {pages}
+        </select>   
+        </div>
       </div>
     );
   };
