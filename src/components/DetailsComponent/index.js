@@ -11,7 +11,7 @@ componentWillMount() {
 
   this.setState({ data: this.props.location.itemData,});
   if(typeof this.props.location.itemData !== 'undefined')
-  {localStorage.setItem(this.props.match.params.id, JSON.stringify(this.props.location.itemData));}
+  {localStorage.setItem(this.props.match.params.etag, JSON.stringify(this.props.location.itemData));}
 }
 
 componentWillUnmount()
@@ -24,7 +24,7 @@ componentWillUnmount()
     this.item = this.state.data;
     if(typeof this.item === 'undefined') 
     {     
-      this.item = JSON.parse(localStorage.getItem(this.props.match.params.id));
+      this.item = JSON.parse(localStorage.getItem(this.props.match.params.etag));
     }
 
     return (
@@ -32,7 +32,7 @@ componentWillUnmount()
      <h1 className={styles.feedtitle}>{this.item.snippet.title}</h1>
      <div className={styles.videocontainer}>
        <div className={styles.videowrapper}>
-         <iframe title = "feedvideo" width="420" height="315" src={"https://www.youtube.com/embed/" + this.item.contentDetails.upload.videoId}></iframe>
+         <iframe title = "feedvideo" width="420" height="315" src={"https://www.youtube.com/embed/" + this.item.id.videoId}></iframe>
        </div>
      </div>
      <div className={styles.feedtext}>

@@ -12,25 +12,29 @@ class Routes extends Component {
     	this.state = {data:[],};    	
 	}
 
-
 	componentDidMount() {
+		let mainUrl = "https://www.googleapis.com/youtube/v3/search";
+		let qsData = {
+			q:'right hand speed classic guitar',
+	      	maxResults: '50',
+	      	part: 'snippet',
+	      	key: 'AIzaSyBERF-mJFGeJPLTayA_q960_wUh9LVj_U8'
+	  	}; 
+		let esc = encodeURIComponent;
+	    let query = `?${Object.keys(qsData).map(k => `${esc(k)}=${esc(qsData[k])}`).join('&')}`;
 
-	fetch("https://apimicrobach.azurewebsites.net/youtube",{ 
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization':'Basic ' + btoa('diego:secret')}
-      })
-      .then(response =>{
-      if (response.status >= 400) { return 'error'; }
-      return response.json() })
-      .then(json => {           
-        this.setState({          
-          data: ( json === 'error' ? 'error' : json.items )
-        });
-      });
-}
+		fetch(mainUrl.concat(query),{ 
+	      method: 'GET'            
+	      })
+	      .then(response =>{
+	      if (response.status >= 400) { return 'error'; }
+	      return response.json() })
+	      .then(json => {           
+	        this.setState({          
+	          data: ( json === 'error' ? 'error' : json.items )
+	        });
+	      });
+	}
 
 
 	dataSupplier = () => { return this.state.data; }
@@ -50,6 +54,7 @@ class Routes extends Component {
 	return(
 		<Router>					 
 			<Switch>
+				
 			    <Route exact path = "/" render={(props) => <ListComponent {...props} youtubeFeeds={this.dataSupplier}/>}/>
 			    {/*<Route exact path="/details/:id/:optionalparam?" component = { DetailsComponent } newparam='Test parameter'/>*/}				
 			    <Route exact path="/details/:id/:optionalparam?" render={(props) => <DetailsComponent {...props} otherparam="testparameter"/>}/>

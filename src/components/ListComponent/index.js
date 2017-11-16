@@ -65,7 +65,7 @@ class ListComponent extends Component {
   goToLast = (event) => {
     this.pageNumber = this.numberOfPages;
     this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
-  }
+  };
 
   render() {
 
@@ -80,13 +80,13 @@ class ListComponent extends Component {
       })());
     }
     let feeds = this.state.data.map((item)=> {     
-      this.detailsData = {pathname: `/details/${encodeURIComponent(item.id.replace(/'?'/g, '%3F'))}`,itemData:item };
+      this.detailsData = {pathname: `/details/${encodeURIComponent(item.etag.replace(/'?'/g, '%3F'))}`,itemData:item };
       if (item.snippet.title === 'Deleted video')
       return (
-            <h2 key = {item.id}>THE VIDEO DOESN'T EXIST ANYMORE</h2>
+            <h2 key = {item.etag}>THE VIDEO DOESN'T EXIST ANYMORE</h2>
       );
       return (       
-        <section className={styles.feedcontainer} key = {item.id}>
+        <section className={styles.feedcontainer} key = {item.etag}>
           <Link  to = {this.detailsData}>         
              <img alt="not found" src = {item.snippet.thumbnails.medium.url} className={styles.feedimg}/>
           </Link>
@@ -107,12 +107,12 @@ class ListComponent extends Component {
 
         <div className={styles.pagination}>
         <div>
-        <button className = {styles.pageButton} onClick= {this.goToFirst}><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>
-        <button className = {styles.pageButton} onClick= {this.prevPage}><i class="fa fa-angle-left" aria-hidden="true"></i></button>  
+        <button className = {styles.pageButton} onClick= {this.goToFirst}><i className="fa fa-angle-double-left" aria-hidden="true"></i></button>
+        <button className = {styles.pageButton} onClick= {this.prevPage}><i className="fa fa-angle-left" aria-hidden="true"></i></button>  
         {pages} 
         <span className = {styles.pagesForMobile}>{this.pageNumber} of {this.numberOfPages}</span>
-        <button className = {styles.pageButton} onClick= {this.nextPage}><i class="fa fa-angle-right" aria-hidden="true"></i></button>
-        <button className = {styles.pageButton} onClick= {this.goToLast}><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
+        <button className = {styles.pageButton} onClick= {this.nextPage}><i className="fa fa-angle-right" aria-hidden="true"></i></button>
+        <button className = {styles.pageButton} onClick= {this.goToLast}><i className="fa fa-angle-double-right" aria-hidden="true"></i></button>
         </div>
         <div>
         <span className={styles.resPerPage}>Results per page: </span>
