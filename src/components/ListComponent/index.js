@@ -57,6 +57,16 @@ class ListComponent extends Component {
     event.preventDefault();
   };
 
+  goToFirst = (event) => {
+    this.pageNumber=1;
+    this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+  };
+
+  goToLast = (event) => {
+    this.pageNumber = this.numberOfPages;
+    this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+  }
+
   render() {
 
     let pages =[];
@@ -96,18 +106,23 @@ class ListComponent extends Component {
         {feeds}
 
         <div className={styles.pagination}>
-        <button className = {styles.pageButton} ><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>
+        <div>
+        <button className = {styles.pageButton} onClick= {this.goToFirst}><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>
         <button className = {styles.pageButton} onClick= {this.prevPage}><i class="fa fa-angle-left" aria-hidden="true"></i></button>  
         {pages} 
+        <span className = {styles.pagesForMobile}>{this.pageNumber} of {this.numberOfPages}</span>
         <button className = {styles.pageButton} onClick= {this.nextPage}><i class="fa fa-angle-right" aria-hidden="true"></i></button>
-        <button className = {styles.pageButton}><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
-        <span>Results per page: </span>
+        <button className = {styles.pageButton} onClick= {this.goToLast}><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
+        </div>
+        <div>
+        <span className={styles.resPerPage}>Results per page: </span>
         <select className = {styles.selectStyle} onChange={this.pageChange} ref = 'test'>
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="25">25</option>
           <option value="50">50</option>
-        </select>   
+        </select> 
+        </div>  
         </div>
       </div>
     );
