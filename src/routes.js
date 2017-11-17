@@ -18,7 +18,10 @@ class Routes extends Component {
 			q:'right hand speed classic guitar',
 	      	maxResults: '50',
 	      	part: 'snippet',
-	      	key: 'AIzaSyBERF-mJFGeJPLTayA_q960_wUh9LVj_U8'
+	      	// DMM web site restricted key	      		      	
+	      	key:'AIzaSyCpUAns1B-pRnPcL8EH7WmuOq5pIBrKCi8'
+	      	
+
 	  	}; 
 		let esc = encodeURIComponent;
 	    let query = `?${Object.keys(qsData).map(k => `${esc(k)}=${esc(qsData[k])}`).join('&')}`;
@@ -42,8 +45,6 @@ class Routes extends Component {
 	render() {
 
 	if(this.state.data.length === 0) return(null);
-
-
 	if (this.state.data === 'error')
 	    return (
 	    <div className="App">   
@@ -55,9 +56,9 @@ class Routes extends Component {
 		<Router>					 
 			<Switch>
 				
-			    <Route exact path = "/" render={(props) => <ListComponent {...props} youtubeFeeds={this.dataSupplier}/>}/>
+			    <Route exact path = "/build/" render={(props) => <ListComponent {...props} youtubeFeeds={this.dataSupplier}/>}/>
 			    {/*<Route exact path="/details/:id/:optionalparam?" component = { DetailsComponent } newparam='Test parameter'/>*/}				
-			    <Route exact path="/details/:id/:optionalparam?" render={(props) => <DetailsComponent {...props} otherparam="testparameter"/>}/>
+			    <Route exact path="/build/details/:id/:optionalparam?" render={(props) => <DetailsComponent {...props} otherparam="testparameter"/>}/>
 			    <Route component  = { NotFoundComponent } />
 			</Switch>   				
 			</Router>

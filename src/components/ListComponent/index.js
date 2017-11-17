@@ -80,7 +80,7 @@ class ListComponent extends Component {
       })());
     }
     let feeds = this.state.data.map((item)=> {     
-      this.detailsData = {pathname: `/details/${encodeURIComponent(item.etag.replace(/'?'/g, '%3F'))}`,itemData:item };
+      this.detailsData = {pathname: `/build/details/${encodeURIComponent(item.etag.replace(/'?'/g, '%3F'))}`,itemData:item };
       if (item.snippet.title === 'Deleted video')
       return (
             <h2 key = {item.etag}>THE VIDEO DOESN'T EXIST ANYMORE</h2>
