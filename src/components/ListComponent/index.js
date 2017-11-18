@@ -9,7 +9,7 @@ class ListComponent extends Component {
     super(props);
     this.state = { data: undefined};
     this.detailsData = {};
-    this.allResults=[];
+    this.searchResult = [];
     this.pageNumber = 1;
     this.pageSize = 5;
     this.feedsLength= this.props.youtubeFeeds().length;
@@ -17,12 +17,12 @@ class ListComponent extends Component {
     this.isSelected = {element: null, isSelected : false};
   };
 
-  componentWillMount() {
-    this.setState({ data: []});
-  };
+  componentWillMount() { this.setState({ data: []}); };
 
   componentDidMount() {
-    this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+    this.refs.searchFeed.value = this.props.defaultSearch;
+    this.searchResult = this.props.youtubeFeeds();
+    this.setState({data: this.searchResult.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
   };
 
   componentWillUnmount() {};
@@ -39,7 +39,7 @@ class ListComponent extends Component {
        .then(json => {
         this.pageNumber = 1;   
         this.feedsLength= json.items.length;
-        this.allResults = json.items;
+        this.searchResult = json.items;
         this.setState({          
             data: ( json === 'error' ? 'error' : json.items.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber))
         });
@@ -49,69 +49,39 @@ class ListComponent extends Component {
   nextPage =(event) => {
     this.numberOfPages = ( this.feedsLength % this.pageSize ) === 0 ? (this.feedsLength /  this.pageSize) : Math.ceil(this.feedsLength /  this.pageSize);  
     if(this.pageNumber < this.numberOfPages)
-    this.pageNumber += 1;
-    if(!this.refs.searchFeed.value)
-    {
-      this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
-      return;
-    }  
-    this.setState({data: this.allResults.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+    this.pageNumber += 1;    
+    this.setState({data: this.searchResult.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
   };
 
   prevPage =(event) => {
     this.numberOfPages = ( this.feedsLength % this.pageSize ) === 0 ? (this.feedsLength /  this.pageSize) : Math.ceil(this.feedsLength /  this.pageSize);  
     if(this.pageNumber === 1) return; 
-    this.pageNumber -= 1; 
-    if(!this.refs.searchFeed.value)
-    {
-      this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
-      return;
-    } 
-    this.setState({data: this.allResults.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});    
+    this.pageNumber -= 1;    
+    this.setState({data: this.searchResult.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});    
   };
 
   pageChange =(event) => {
     this.pageSize = event.target.value;
     this.pageNumber = 1;
     this.numberOfPages = ( this.feedsLength % this.pageSize ) === 0 ? (this.feedsLength /  this.pageSize) : Math.ceil(this.feedsLength /  this.pageSize);  
-    if(!this.refs.searchFeed.value)
-    {
-      this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
-      return;
-    } 
-    this.setState({data: this.allResults.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+    this.setState({data: this.searchResult.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
   };
 
   goToPage = (event) => {
-    this.pageNumber = parseInt(event.target.dataset.link,10);
-    if(!this.refs.searchFeed.value)
-    {
-      this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
-      return;
-    } 
-    this.setState({data: this.allResults.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+    this.pageNumber = parseInt(event.target.dataset.link,10);    
+    this.setState({data: this.searchResult.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
     this.isSelected = { element:this.pageNumber, isSelected: true};
     event.preventDefault();
   };
 
   goToFirst = (event) => {
-    this.pageNumber=1;
-    if(!this.refs.searchFeed.value)
-    {
-      this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
-      return;
-    } 
-    this.setState({data: this.allResults.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+    this.pageNumber=1;    
+    this.setState({data: this.searchResult.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
   };
 
   goToLast = (event) => {
-    this.pageNumber = this.numberOfPages;
-     if(!this.refs.searchFeed.value)
-    {
-      this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
-      return;
-    } 
-    this.setState({data: this.allResults.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+    this.pageNumber = this.numberOfPages;    
+    this.setState({data: this.searchResult.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
   };
 
   render() {
@@ -152,9 +122,7 @@ class ListComponent extends Component {
       <div className={styles.App}>   
         <input type="text" ref="searchFeed"/>        
         <button onClick={this.searchFeeds}>Search</button>
-
         {feeds}
-
         <div className={styles.pagination}>
         <div>
         <button className = {styles.pageButton} onClick= {this.goToFirst}><i className="fa fa-angle-double-left" aria-hidden="true"></i></button>
@@ -166,8 +134,7 @@ class ListComponent extends Component {
         </div>
         <div>
         <span className={styles.resPerPage}>Results per page: </span>
-        <select className = {styles.selectStyle} onChange={this.pageChange} ref = 'test'>
-          
+        <select className = {styles.selectStyle} onChange={this.pageChange} ref = 'test'>          
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="25">25</option>

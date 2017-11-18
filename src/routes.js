@@ -14,7 +14,7 @@ class Routes extends Component {
 
 	}
 
-	componentWillMount() { this.defaultSearch = this.props.defaultSearch; }
+	componentWillMount() {}
 	componentDidMount() {}
 
 
@@ -42,8 +42,7 @@ class Routes extends Component {
 	      	maxResults: '50',
 	      	part: 'snippet',
 	      	// DMM web site restricted key	      		      	
-	      	//key:'AIzaSyCpUAns1B-pRnPcL8EH7WmuOq5pIBrKCi8',
-	      	key:'AIzaSyA9Ed1X7srPTEIuOggvE7NPWOoV2yJIdwU'
+	      	key:'AIzaSyCpUAns1B-pRnPcL8EH7WmuOq5pIBrKCi8'	      	
 	      	};	  	 
 		let esc = encodeURIComponent;
 	    let query = `?${Object.keys(qsData).map(k => `${esc(k)}=${esc(qsData[k])}`).join('&')}`;
@@ -65,7 +64,7 @@ class Routes extends Component {
 		return(		
 			<Router>					 
 				<Switch>				
-				    <Route exact path = "/build/" render={(props) => <ListComponent {...props} foundFeeds = {this.searchFeeds} youtubeFeeds={this.dataSupplier}/>}/>
+				    <Route exact path = "/build/" render={(props) => <ListComponent {...props} defaultSearch={this.defaultSearch} foundFeeds = {this.searchFeeds} youtubeFeeds={this.dataSupplier}/>}/>
 				    {/*<Route exact path="/details/:id/:optionalparam?" component = { DetailsComponent } newparam='Test parameter'/>*/}				
 				    <Route exact path="/build/details/:id/:optionalparam?" render={(props) => <DetailsComponent {...props} otherparam="testparameter"/>}/>
 				    <Route component  = { NotFoundComponent } />
