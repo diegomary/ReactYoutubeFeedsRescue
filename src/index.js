@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Routes from './routes';
+import Init from './init';
 import './index.css';
 
 //import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<Routes/>,document.getElementById('root'));
+ReactDOM.render(<Init/>,document.getElementById('root'));
 
 //registerServiceWorker();

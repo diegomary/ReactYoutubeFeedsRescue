@@ -9,26 +9,17 @@ class Routes extends Component {
 
 	constructor(props) {
     	super(props);
-    	this.state = {data:[],};    	
+    	this.state = {data:[],}; 
+    	this.defaultSearch = null;   	
 	}
 
+	componentWillMount() {
+		this.defaultSearch = this.props.defaultSearch;   
+  	};
+
 	componentDidMount() {
-		let mainUrl = "https://www.googleapis.com/youtube/v3/search";
-		let qsData = {
-			q:'right hand speed classic guitar',
-	      	maxResults: '50',
-	      	part: 'snippet',
-	      	// DMM web site restricted key	      		      	
-	      	key:'AIzaSyCpUAns1B-pRnPcL8EH7WmuOq5pIBrKCi8'
-	      	
 
-	  	}; 
-		let esc = encodeURIComponent;
-	    let query = `?${Object.keys(qsData).map(k => `${esc(k)}=${esc(qsData[k])}`).join('&')}`;
-
-		fetch(mainUrl.concat(query),{ 
-	      method: 'GET'            
-	      })
+		this.searchFeeds(this.defaultSearch)
 	      .then(response =>{
 	      if (response.status >= 400) { return 'error'; }
 	      return response.json() })
@@ -38,9 +29,20 @@ class Routes extends Component {
 	        });
 	      });
 	}
+	dataSupplier = () => { return this.state.data; };
+	searchFeeds = (criteria) => {
+		let mainUrl = "https://www.googleapis.com/youtube/v3/search";
+		let qsData = {
+			q:criteria,
+	      	maxResults: '50',
+	      	part: 'snippet',
+	      	// DMM web site restricted key	      		      	
+	      	key:'AIzaSyCpUAns1B-pRnPcL8EH7WmuOq5pIBrKCi8'
+	      	};	  	 
+		let esc = encodeURIComponent;
+	    let query = `?${Object.keys(qsData).map(k => `${esc(k)}=${esc(qsData[k])}`).join('&')}`;
+		return fetch(mainUrl.concat(query), {method: 'GET'});	      }
 
-
-	dataSupplier = () => { return this.state.data; }
 
 	render() {
 
@@ -53,15 +55,17 @@ class Routes extends Component {
 	  );
 
 	return(
+		
 		<Router>					 
-			<Switch>
-				
-			    <Route exact path = "/build/" render={(props) => <ListComponent {...props} youtubeFeeds={this.dataSupplier}/>}/>
+			<Switch>				
+			    <Route exact path = "/build/" render={(props) => <ListComponent {...props} foundFeeds = {this.searchFeeds} youtubeFeeds={this.dataSupplier}/>}/>
 			    {/*<Route exact path="/details/:id/:optionalparam?" component = { DetailsComponent } newparam='Test parameter'/>*/}				
 			    <Route exact path="/build/details/:id/:optionalparam?" render={(props) => <DetailsComponent {...props} otherparam="testparameter"/>}/>
 			    <Route component  = { NotFoundComponent } />
 			</Switch>   				
-			</Router>
+		</Router>
+
+
 		);
 	}
 }

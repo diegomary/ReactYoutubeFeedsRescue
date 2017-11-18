@@ -3,13 +3,13 @@ import * as d3 from "d3";
 import { Link } from 'react-router-dom';
 import styles from './styles.css';
 
-
 class ListComponent extends Component {
 
   constructor(props) {
     super(props);
     this.state = { data: undefined};
     this.detailsData = {};
+    this.allResults=[];
     this.pageNumber = 1;
     this.pageSize = 5;
     this.feedsLength= this.props.youtubeFeeds().length;
@@ -29,42 +29,89 @@ class ListComponent extends Component {
   shouldComponentUpdate(nextProps,nextState) {  return true; };
   componentWillReceiveProps(nextProps) {};
 
+  searchFeeds = () => {
+   let criteria = this.refs.searchFeed.value;
+   if(!criteria) return;
+   let promise = this.props.foundFeeds(criteria);
+   promise.then(response =>{
+       if (response.status >= 400) { return 'error'; }
+       return response.json() })
+       .then(json => {
+        this.pageNumber = 1;   
+        this.feedsLength= json.items.length;
+        this.allResults = json.items;
+        this.setState({          
+            data: ( json === 'error' ? 'error' : json.items.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber))
+        });
+    });  
+  };
+
   nextPage =(event) => {
     this.numberOfPages = ( this.feedsLength % this.pageSize ) === 0 ? (this.feedsLength /  this.pageSize) : Math.ceil(this.feedsLength /  this.pageSize);  
     if(this.pageNumber < this.numberOfPages)
     this.pageNumber += 1;
-    this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+    if(!this.refs.searchFeed.value)
+    {
+      this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+      return;
+    }  
+    this.setState({data: this.allResults.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
   };
 
   prevPage =(event) => {
     this.numberOfPages = ( this.feedsLength % this.pageSize ) === 0 ? (this.feedsLength /  this.pageSize) : Math.ceil(this.feedsLength /  this.pageSize);  
     if(this.pageNumber === 1) return; 
     this.pageNumber -= 1; 
-    this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+    if(!this.refs.searchFeed.value)
+    {
+      this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+      return;
+    } 
+    this.setState({data: this.allResults.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});    
   };
 
   pageChange =(event) => {
     this.pageSize = event.target.value;
     this.pageNumber = 1;
     this.numberOfPages = ( this.feedsLength % this.pageSize ) === 0 ? (this.feedsLength /  this.pageSize) : Math.ceil(this.feedsLength /  this.pageSize);  
-    this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+    if(!this.refs.searchFeed.value)
+    {
+      this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+      return;
+    } 
+    this.setState({data: this.allResults.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
   };
 
   goToPage = (event) => {
     this.pageNumber = parseInt(event.target.dataset.link,10);
-    this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+    if(!this.refs.searchFeed.value)
+    {
+      this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+      return;
+    } 
+    this.setState({data: this.allResults.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
     this.isSelected = { element:this.pageNumber, isSelected: true};
     event.preventDefault();
   };
 
   goToFirst = (event) => {
     this.pageNumber=1;
-    this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+    if(!this.refs.searchFeed.value)
+    {
+      this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+      return;
+    } 
+    this.setState({data: this.allResults.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
   };
 
   goToLast = (event) => {
     this.pageNumber = this.numberOfPages;
-    this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+     if(!this.refs.searchFeed.value)
+    {
+      this.setState({data: this.props.youtubeFeeds().slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
+      return;
+    } 
+    this.setState({data: this.allResults.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
   };
 
   render() {
@@ -103,6 +150,9 @@ class ListComponent extends Component {
 
     return (    
       <div className={styles.App}>   
+        <input type="text" ref="searchFeed"/>        
+        <button onClick={this.searchFeeds}>Search</button>
+
         {feeds}
 
         <div className={styles.pagination}>
@@ -117,6 +167,7 @@ class ListComponent extends Component {
         <div>
         <span className={styles.resPerPage}>Results per page: </span>
         <select className = {styles.selectStyle} onChange={this.pageChange} ref = 'test'>
+          
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="25">25</option>
