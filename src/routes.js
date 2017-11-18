@@ -9,26 +9,31 @@ class Routes extends Component {
 
 	constructor(props) {
     	super(props);
-    	this.state = {data:[],}; 
-    	this.defaultSearch = null;   	
+    	this.state = {data:[],ready:false}; 
+    	this.defaultSearch = null;
+
 	}
 
-	componentWillMount() {
-		this.defaultSearch = this.props.defaultSearch;   
-  	};
+	componentWillMount() { this.defaultSearch = this.props.defaultSearch; }
+	componentDidMount() {}
 
-	componentDidMount() {
 
-		this.searchFeeds(this.defaultSearch)
+	setFavourite = () => {
+
+	if(this.refs.favouriteFeed.value) {
+  		this.defaultSearch = this.refs.favouriteFeed.value;
+  		this.searchFeeds(this.defaultSearch)
 	      .then(response =>{
 	      if (response.status >= 400) { return 'error'; }
 	      return response.json() })
 	      .then(json => {           
 	        this.setState({          
-	          data: ( json === 'error' ? 'error' : json.items )
+	          data: ( json === 'error' ? 'error' : json.items ),ready:true
 	        });
 	      });
-	}
+  	}}
+
+
 	dataSupplier = () => { return this.state.data; };
 	searchFeeds = (criteria) => {
 		let mainUrl = "https://www.googleapis.com/youtube/v3/search";
@@ -37,7 +42,8 @@ class Routes extends Component {
 	      	maxResults: '50',
 	      	part: 'snippet',
 	      	// DMM web site restricted key	      		      	
-	      	key:'AIzaSyCpUAns1B-pRnPcL8EH7WmuOq5pIBrKCi8'
+	      	//key:'AIzaSyCpUAns1B-pRnPcL8EH7WmuOq5pIBrKCi8',
+	      	key:'AIzaSyA9Ed1X7srPTEIuOggvE7NPWOoV2yJIdwU'
 	      	};	  	 
 		let esc = encodeURIComponent;
 	    let query = `?${Object.keys(qsData).map(k => `${esc(k)}=${esc(qsData[k])}`).join('&')}`;
@@ -45,28 +51,35 @@ class Routes extends Component {
 
 
 	render() {
-
-	if(this.state.data.length === 0) return(null);
+	
 	if (this.state.data === 'error')
 	    return (
 	    <div className="App">   
 	      <h2>An error prevented to read the feeds properly</h2>  
 	    </div>
-	  );
+	);
 
-	return(
-		
-		<Router>					 
-			<Switch>				
-			    <Route exact path = "/build/" render={(props) => <ListComponent {...props} foundFeeds = {this.searchFeeds} youtubeFeeds={this.dataSupplier}/>}/>
-			    {/*<Route exact path="/details/:id/:optionalparam?" component = { DetailsComponent } newparam='Test parameter'/>*/}				
-			    <Route exact path="/build/details/:id/:optionalparam?" render={(props) => <DetailsComponent {...props} otherparam="testparameter"/>}/>
-			    <Route component  = { NotFoundComponent } />
-			</Switch>   				
-		</Router>
-
-
+	
+	if(this.state.ready)
+	{
+		return(		
+			<Router>					 
+				<Switch>				
+				    <Route exact path = "/build/" render={(props) => <ListComponent {...props} foundFeeds = {this.searchFeeds} youtubeFeeds={this.dataSupplier}/>}/>
+				    {/*<Route exact path="/details/:id/:optionalparam?" component = { DetailsComponent } newparam='Test parameter'/>*/}				
+				    <Route exact path="/build/details/:id/:optionalparam?" render={(props) => <DetailsComponent {...props} otherparam="testparameter"/>}/>
+				    <Route component  = { NotFoundComponent } />
+				</Switch>   				
+			</Router>
 		);
+	}
+		return(
+			<div>
+				Default feed:<input type= "text" ref="favouriteFeed"/> 
+	      		<button onClick={this.setFavourite}>Set</button>
+    		</div>
+		)
+
 	}
 }
 export default Routes;
