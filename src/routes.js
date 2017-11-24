@@ -1,6 +1,6 @@
 // src/routes.js
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import ListComponent from './components/ListComponent/index';
 import DetailsComponent from './components/DetailsComponent/index';
 import NotFoundComponent from './components/NotFoundComponent/index';
@@ -11,12 +11,10 @@ class Routes extends Component {
     	super(props);
     	this.state = {data:[],ready:false}; 
     	this.defaultSearch = null;
-
 	}
 
 	componentWillMount() {}
 	componentDidMount() {}
-
 
 	setFavourite = () => {
 
@@ -42,11 +40,12 @@ class Routes extends Component {
 	      	maxResults: '50',
 	      	part: 'snippet',
 	      	// DMM web site restricted key	      		      	
-	      	key:'AIzaSyCpUAns1B-pRnPcL8EH7WmuOq5pIBrKCi8'	      	
+	      	key:'AIzaSyCpUAns1B-pRnPcL8EH7WmuOq5pIBrKCi8',
+	      	      	
 	      	};	  	 
 		let esc = encodeURIComponent;
 	    let query = `?${Object.keys(qsData).map(k => `${esc(k)}=${esc(qsData[k])}`).join('&')}`;
-		return fetch(mainUrl.concat(query), {method: 'GET'});	      }
+		return fetch(mainUrl.concat(query), {method: 'GET'});}
 
 
 	render() {
@@ -62,21 +61,33 @@ class Routes extends Component {
 	if(this.state.ready)
 	{
 		return(		
-			<Router>					 
+			<BrowserRouter>
+			 <div>				 
 				<Switch>				
-				    <Route exact path = "/build/" render={(props) => <ListComponent {...props} defaultSearch={this.defaultSearch} foundFeeds = {this.searchFeeds} youtubeFeeds={this.dataSupplier}/>}/>
+				    <Route   exact path = "/" render={(props) => <ListComponent  {...props}  defaultSearch={this.defaultSearch} foundFeeds = {this.searchFeeds} youtubeFeeds={this.dataSupplier}/>}/>
 				    {/*<Route exact path="/details/:id/:optionalparam?" component = { DetailsComponent } newparam='Test parameter'/>*/}				
-				    <Route exact path="/build/details/:id/:optionalparam?" render={(props) => <DetailsComponent {...props} otherparam="testparameter"/>}/>
+				    <Route  exact path="/details/:id/:optionalparam?" render={(props) => <DetailsComponent {...props}  otherparam="testparameter"/>}/>
 				    <Route component  = { NotFoundComponent } />
-				</Switch>   				
-			</Router>
+				</Switch>
+			</div>		   				
+			</BrowserRouter>
 		);
 	}
 		return(
 			<div>
-				Default feed:<input type= "text" ref="favouriteFeed"/> 
-	      		<button onClick={this.setFavourite}>Set</button>
-    		</div>
+				<BrowserRouter>
+				 <div>				 
+					<Switch>				
+					    <Route exact path = "/" render={() =>null}/>			  
+					    <Route component  = { NotFoundComponent } />
+					</Switch>
+				</div>		   				
+				</BrowserRouter>
+				<div>
+					Default feed:<input type= "text" ref="favouriteFeed"/> 
+		      		<button onClick={this.setFavourite}>Set</button>
+	    		</div>
+			</div>
 		)
 
 	}

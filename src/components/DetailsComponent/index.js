@@ -7,6 +7,13 @@ class DetailsComponent extends Component {
     this.state = { data: undefined, };
     this.item = {};   
   }
+
+
+  componentDidMount() {  
+   console.log(this.props.history)
+  };
+
+
   componentWillMount() {
     this.setState({ data: this.props.location.itemData,});
     if(typeof this.props.location.itemData !== 'undefined')
@@ -28,7 +35,7 @@ class DetailsComponent extends Component {
         <h1 className={styles.feedtitle}>{this.item.snippet.title}</h1>
         <div className={styles.videocontainer}>
           <div className={styles.videowrapper}>
-            <iframe allowfullscreen="allowfullscreen"
+            <iframe allowFullScreen="allowfullscreen"
                     mozallowfullscreen="mozallowfullscreen" 
                     msallowfullscreen="msallowfullscreen" 
                     oallowfullscreen="oallowfullscreen" 

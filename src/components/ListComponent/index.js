@@ -18,8 +18,15 @@ class ListComponent extends Component {
   };
 
   componentWillMount() { this.setState({ data: []}); };
+  // Disable back button
+  onBackButtonEvent = (e) => {
+    this.props.history.go(1);
+    e.preventDefault();
+  }
 
   componentDidMount() {
+    window.onpopstate = this.onBackButtonEvent;
+    this.props.history.push(this.props.location.pathname, null);   
     this.refs.searchFeed.value = this.props.defaultSearch;
     this.searchResult = this.props.youtubeFeeds();
     this.setState({data: this.searchResult.slice((this.pageNumber - 1) * this.pageSize , this.pageSize * this.pageNumber)});
@@ -97,7 +104,7 @@ class ListComponent extends Component {
       })());
     }
     let feeds = this.state.data.map((item)=> {     
-      this.detailsData = {pathname: `/build/details/${encodeURIComponent(item.etag.replace(/'?'/g, '%3F'))}`,itemData:item };
+      this.detailsData = {pathname: `/details/${encodeURIComponent(item.etag.replace(/'?'/g, '%3F'))}`,itemData:item };
       if (item.snippet.title === 'Deleted video')
       return (
             <h2 key = {item.etag}>THE VIDEO DOESN'T EXIST ANYMORE</h2>
